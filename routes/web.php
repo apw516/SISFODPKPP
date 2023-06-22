@@ -39,6 +39,7 @@ Route::post('ceknotif', [SiteplanController::class, 'ceknotif'])->middleware('au
 Route::post('simpanfilegambar', [SiteplanController::class, 'simpanfilegambar'])->middleware('auth')->name('simpanfilegambar');
 Route::post('ambilform_upload', [SiteplanController::class, 'ambilform_upload'])->middleware('auth')->name('ambilform_upload');
 Route::post('viewfile', [SiteplanController::class, 'viewfile'])->middleware('auth')->name('viewfile');
+Route::post('ambilberkas', [SiteplanController::class, 'ambilberkas'])->middleware('auth')->name('ambilberkas');
 Route::get('download/{id}', [SiteplanController::class, 'downloadberkas'])->middleware('auth')->name('downloadberkas');
 
 Route::get('profil', [ProfilController::class, 'index'])->middleware('auth')->name('profil');

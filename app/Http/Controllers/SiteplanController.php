@@ -312,8 +312,8 @@ class SiteplanController extends Controller
             ];
             if (count($cek) > 0) {
                 Upload::whereRaw('tspr_id = ? and kode_jenis_persyaratan = ?', array([$request->id_tspr, $request->jenis]))->update($uploadnya);
-                if (File::exists(public_path('../storage/files/' . $cek[0]->nama_file))) {
-                    File::delete(public_path('../storage/files/' . $cek[0]->nama_file));
+                if (File::exists(public_path('storage/files/' . $cek[0]->nama_file))) {
+                    File::delete(public_path('storage/files/' . $cek[0]->nama_file));
                 } else {
                     // dd('File does not exists.');
                 }
@@ -334,12 +334,13 @@ class SiteplanController extends Controller
             }
             // File extension
             // File upload location
-            $location = '../storage/files';
+            $location = 'storage/files';
             // Upload file
             $file->move($location, $filename);
 
             // File path
-            $filepath = url('../../storage/files/' . $filename);
+            $filepath = url('storage/files/' . $filename);
+            // dd($filepath);
 
             // Response
             $data['kode'] = 200;
@@ -402,5 +403,14 @@ class SiteplanController extends Controller
         ];
         echo json_encode($back);
         die;
+    }
+    public function ambilberkas(Request $request)
+    {
+        $namafile = $request->namafile;
+        $filepath = url('storage/files/' . $request->namafile);
+        return view('siteplan.viewfile',compact([
+            'filepath',
+            'namafile'
+        ]));
     }
 }

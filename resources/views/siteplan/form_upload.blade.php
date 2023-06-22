@@ -206,6 +206,29 @@
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="modalview" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">View Berkas</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="vutama">
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 @include('templates.js')
 <script>
     $('.upload').on("click", function() {
@@ -216,21 +239,20 @@
         uploadaja(id_surat, jenis, id_tspr, id_tris)
     })
     $('.donlod').on("click", function() {
-        jenis = $(this).attr('namafile')
-        window.open('download/' + jenis)
-        // $('#modalview_upload').modal('show')
-        // $.ajax({
-        //     type: 'post',
-        //     data: {
-        //         _token: "{{ csrf_token() }}",
-        //         jenis
-        //     },
-        //     url: '<?= route('viewfile') ?>',
-        //     success: function(response) {
-        //         loadhide()
-        //         $('.vfile').html(response);
-        //     }
-        // });
+        $("#modalview").modal()
+        namafile = $(this).attr('namafile')
+        $.ajax({
+                type: 'post',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    namafile
+                },
+                url: '<?= route('ambilberkas') ?>',
+                success: function(response) {
+                    loadhide()
+                    $('.vutama').html(response);
+                }
+            });
     })
     $('.showmodalupload').on("click", function() {
         jenis = $(this).attr('jenis')
