@@ -50,7 +50,7 @@ class SiteplanController extends Controller
     {
         $kecamatan = DB::select('select * from master_kecamatan');
         $desa = DB::select('select * from master_desa_kelurahan');
-        $s = DB::select('select * from master_jenis_persyaratan');
+        $s = DB::select('SELECT * from master_jenis_persyaratan order by no_urut asc');
         $d = DB::select('SELECT * FROM trans_rekomendasi_informasi_siteplan a INNER JOIN trans_surat_permohonan_rekom_siteplan b
         ON a.id_tris = b.tris_id WHERE a.id_tris = ?', [$request->id]);
         $file = DB::select('SELECT * FROM trans_rekomendasi_files a WHERE a.tspr_id = ?', [$d[0]->id_tspr]);
@@ -65,6 +65,7 @@ class SiteplanController extends Controller
         $nama = $request->nama;
         $id_surat = $request->id_surat;
         $id_tspr = $request->id_tspr;
+        $mandatory = $request->mandatory;
         $id_tris = $request->id_tris;
         $file = DB::select('SELECT * FROM trans_rekomendasi_files a WHERE a.tspr_id = ? AND kode_jenis_persyaratan = ?', [$request->id_tspr, $jenis]);
         if (count($file) > 0) {
@@ -79,7 +80,8 @@ class SiteplanController extends Controller
             'id_tspr',
             'id_tris',
             'file',
-            'filepath'
+            'filepath',
+            'mandatory'
         ]));
     }
     public function formkonfirmasi(Request $request)
@@ -282,7 +284,7 @@ class SiteplanController extends Controller
                     die;
                 }
             }
-            if ($request->jenis == 'JPR20') {
+            if ($request->jenis == 'JPR22') {
                 if ($extension != 'cdr') {
                     $data['kode'] = 500;
                     $data['message'] = 'File Harus Berformat cdr.';
@@ -309,6 +311,7 @@ class SiteplanController extends Controller
                 'nama_file' => $filename,
                 'ukuran_file' => '0',
                 'tipe_file' => $extension,
+                'mandatory' => $request->mandatory,
             ];
             if (count($cek) > 0) {
                 Upload::whereRaw('tspr_id = ? and kode_jenis_persyaratan = ?', array([$request->id_tspr, $request->jenis]))->update($uploadnya);
@@ -320,8 +323,8 @@ class SiteplanController extends Controller
             } else {
                 Upload::create($uploadnya);
             }
-            $cek2 = DB::select('select * from trans_rekomendasi_files where tspr_id = ?', [$request->id_tspr]);
-            if (count($cek2) >= 20) {
+            $cek2 = DB::select('select * from trans_rekomendasi_files where tspr_id = ? and mandatory = ?', [$request->id_tspr,'Y']);
+            if (count($cek2) >= 15) {
                 $update_surat = [
                     'status_permohonan' => '2'
                 ];

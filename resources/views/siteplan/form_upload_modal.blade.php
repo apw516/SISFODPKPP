@@ -9,6 +9,8 @@
             aria-describedby="emailHelp" value="{{ $id_tris }}">
         <input hidden readonly type="text" class="form-control" name="jenis" id="jenis"
             aria-describedby="emailHelp" value="{{ $jenis }}">
+        <input hidden readonly type="text" class="form-control" name="mandatory" id="mandatory"
+            aria-describedby="emailHelp" value="{{ $mandatory }}">
     </div>
     <div class="form-group">
         <label for="exampleInputPassword1">Pilih File</label>

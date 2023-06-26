@@ -130,7 +130,8 @@
                                         <br />
                                         <p class="url">
                                             <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
-                                            <a href="#" class="text-success"><i class="fa fa-paperclip"></i>
+                                            <a class="text-success donlod"
+                                                namafile="{{ $g->nama_file }}"><i class="fa fa-paperclip"></i>
                                                 {{ $g->nama_file }} <i
                                                     class="bi bi-check2-circle text-success"></i></a>
                                         </p>
@@ -148,9 +149,30 @@
         </div>
     </div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="modalview" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">View Berkas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="vutama">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     function kirimkonfirmasi() {
-
         idtris = $('#idtris').val()
         Swal.fire({
             title: 'Anda Yakin ?',
@@ -169,7 +191,7 @@
                     dataType: 'json',
                     data: {
                         _token: "{{ csrf_token() }}",
-                       idtris,
+                        idtris,
                     },
                     url: 'kirimkonfirmasi',
                     error: function(data) {
@@ -199,4 +221,20 @@
             }
         })
     }
+    $('.donlod').on("click", function() {
+        $("#modalview").modal()
+        namafile = $(this).attr('namafile')
+        $.ajax({
+            type: 'post',
+            data: {
+                _token: "{{ csrf_token() }}",
+                namafile
+            },
+            url: '<?= route('ambilberkas') ?>',
+            success: function(response) {
+                loadhide()
+                $('.vutama').html(response);
+            }
+        });
+    })
 </script>

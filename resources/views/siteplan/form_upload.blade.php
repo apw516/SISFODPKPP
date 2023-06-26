@@ -85,8 +85,9 @@
                                 <tbody>
                                     @foreach ($s as $w)
                                         <tr>
-                                            <td> <strong style="font-style: italic">* {{ $w->jenis_persyaratan }}
+                                            <td> <strong style="font-style: italic">@if($w->mandatory == 'Y') <a style="font-size:20px" class="text-danger text-bold">*</a> @endif{{ $w->jenis_persyaratan }}
                                                 </strong><br class="mb-2">
+                                                {{ $w->keterangan }}
                                                 {{-- <input type="file" id="{{ $w->kode_jenis_persyaratan }}"> --}}
                                                 <p class="{{ $w->kode_jenis_persyaratan }}">
                                                     @foreach ($file as $f)
@@ -139,7 +140,7 @@
                                             <td>
                                                 <button class="badefe btn-success btn-sm showmodalupload"
                                                     nama="{{ $w->jenis_persyaratan }}"
-                                                    jenis="{{ $w->kode_jenis_persyaratan }}" data-toggle="modal"
+                                                    jenis="{{ $w->kode_jenis_persyaratan }}" mandatory="{{ $w->mandatory }}" data-toggle="modal"
                                                     data-target="#modalupload"><i class="bi bi-upload mr"></i></button>
                                                 {{-- <button class="badefe btn-success btn-sm upload"
                                                     jenis="{{ $w->kode_jenis_persyaratan }}"><i
@@ -257,6 +258,7 @@
     $('.showmodalupload').on("click", function() {
         jenis = $(this).attr('jenis')
         nama = $(this).attr('nama')
+        mandatory = $(this).attr('mandatory')
         id_surat = $('#id_surat').val()
         id_tspr = $('#id_tspr').val()
         id_tris = $('#id_tris').val()
@@ -268,7 +270,8 @@
                 nama,
                 id_surat,
                 id_tspr,
-                id_tris
+                id_tris,
+                mandatory
             },
             url: '<?= route('ambilform_upload') ?>',
             success: function(response) {
@@ -382,6 +385,7 @@
         fd.append('luas', $('#luas').val());
         fd.append('lokasi', $('#lokasi').val());
         fd.append('atasnama', $('#atasnama').val());
+        fd.append('mandatory', $('#mandatory').val());
         $.ajax({
             async: true,
             type: 'post',
